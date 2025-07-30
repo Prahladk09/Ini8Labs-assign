@@ -1,0 +1,41 @@
+@import 'variables';
+
+.dashboard {
+  min-height: 100vh;
+  background-color: $bg-light;
+}
+
+.dashboard-main {
+  padding: $spacing-lg 0;
+}
+
+.dashboard-header {
+  margin-bottom: $spacing-xl;
+  padding: $spacing-lg;
+  background-color: $bg-primary;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+.patient-selector {
+  max-width: 300px;
+  
+  .form-label {
+    margin-bottom: $spacing-sm;
+  }
+  
+  .patient-input {
+    font-size: $font-size-md;
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  .dashboard-main {
+    padding: $spacing-md 0;
+  }
+  
+  .dashboard-header {
+    margin-bottom: $spacing-lg;
+    padding: $spacing-md;
+  }
+} 
