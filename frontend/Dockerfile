@@ -10,7 +10,7 @@ RUN npm install
 COPY . .
 
 # Build React app
-RUN npm run build
+RUN npm install && npm run build
 
 # Use serve to run built app
 RUN npm install -g serve

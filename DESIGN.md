@@ -137,35 +137,28 @@ graph TD
 
 ```yaml
 version: "3.8"
+
 services:
   backend:
     build: ./backend
+    container_name: fastapi-backend
+    ports:
+      - "8000:8000"
     volumes:
-      - documents-data:/app/documents
+      - ./backend/documents:/app/documents       
+      - ./backend/test.db:/app/test.db 
     environment:
-      - DATABASE_URL=postgresql://user:pass@db:5432/meddocs
-    depends_on:
-      - db
+      - DATABASE_URL=sqlite:///./test.db
+    restart: always
+
   frontend:
     build: ./frontend
+    container_name: react-frontend
     ports:
-      - "3000:80"
-  db:
-    image: postgres:15
-    environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=meddocs
-    volumes:
-      - db-data:/var/lib/postgresql/data
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-    # optional
-volumes:
-  documents-data:
-  db-data:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: always
 ```
 
 ### Dockerfile (backend, snippet)
@@ -173,21 +166,23 @@ volumes:
 ```dockerfile
 FROM python:3.11
 WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-RUN pip install -r requirements.txt
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
 ```
 
 ### Dockerfile (frontend, snippet)
 
 ```dockerfile
-FROM node:20 AS build
-WORKDIR /app
+FROM node:20
+COPY package.json package-lock.json ./
+RUN npm install
 COPY . .
 RUN npm install && npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
+EXPOSE 3000
+CMD ["serve", "-s", "build", "-l", "3000"]
 ```
 
 ---
