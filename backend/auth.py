@@ -12,7 +12,7 @@ import deps
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # JWT Configuration
-SECRET_KEY = "your-secret-key-change-this-in-production"
+SECRET_KEY = "tk8fgWaA/inZ+uyLP7dzkE0u5sdSXM7dF4Xpuys+VBk="
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
